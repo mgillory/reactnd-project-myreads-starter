@@ -10,10 +10,10 @@ export default class BookList extends Component {
     }
   }
 
-  findIndex = (title) => {
+  findIndex = (id) => {
     const { books } = this.props;
     for (let i = 0; i < books.length; i++) {
-      if (books[i].title === title) {
+      if (books[i].id === id) {
         return i;
       }
     }
@@ -21,7 +21,7 @@ export default class BookList extends Component {
 
   onChange = (e, book) => {
     const { books, handleChange, booksOnTheShelf } = this.props;
-    const bookIndex = this.findIndex(book.title);
+    const bookIndex = this.findIndex(book.id);
     books[bookIndex].shelf = e.target.value;
     handleChange(books[bookIndex], e.target.value, booksOnTheShelf ? true : false);
   }
@@ -30,6 +30,10 @@ export default class BookList extends Component {
     const { booksOnTheShelf } = this.props;
     const book = booksOnTheShelf && booksOnTheShelf.find(book => book.id === bookId);
     return book ? book.shelf : false;
+  }
+
+  onClick = (bookIndex) => {
+    console.log(bookIndex);
   }
 
   onMouseEnter = (bookIndex) => {
@@ -49,7 +53,12 @@ export default class BookList extends Component {
           <li key={book.id}>
             <div className="book">
               <div className="book-top">
-                <div className={classnames('book-cover', { 'has-positive-translate': hoverOn > -1 && hoverOn < i ? true : false }, { 'has-negative-translate': hoverOn > -1 && hoverOn > i ? true : false })} onMouseEnter={() => this.onMouseEnter(i)} onMouseLeave={this.onMouseLeave} style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks && book.imageLinks.smallThumbnail})` }} />
+                <div
+                  className={classnames('book-cover', { 'has-positive-translate': hoverOn > -1 && hoverOn < i ? true : false }, { 'has-negative-translate': hoverOn > -1 && hoverOn > i ? true : false })}
+                  onClick={() => this.onClick(i)}
+                  onMouseEnter={() => this.onMouseEnter(i)}
+                  onMouseLeave={this.onMouseLeave}
+                  style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks && book.imageLinks.smallThumbnail})` }} />
                 <div className={classnames('book-shelf-changer', { 'has-positive-translate': hoverOn > -1 && hoverOn < i ? true : false }, { 'has-negative-translate': hoverOn > -1 && hoverOn > i ? true : false })} style={hoverOn === i ? { display: 'none' } : {}}>
                   <select value={this.isBookOnTheShelf(book.id) || book.shelf || 'none'} onChange={e => this.onChange(e, book)}>
                     <option value="move" disabled>Move to...</option>

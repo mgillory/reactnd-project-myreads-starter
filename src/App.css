@@ -210,3 +210,7 @@ body, .app {
   text-align: center;
   font-size: 0.8em;
 }
+
+.loader {
+  text-align: center;
+}

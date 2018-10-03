@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { PulseLoader } from 'react-spinners';
 import BookShelf from './BookShelf';
 import BookList from './BookList';
 import { search } from '../BooksAPI';
@@ -8,24 +9,26 @@ import '../App.css';
 export default class Search extends Component {
   state = {
     searchQuery: '',
-    queryResult: undefined
+    queryResult: undefined,
+    loading: false
   }
 
   onChangeQuery = (e) => {
     this.setState({
-      searchQuery: e.target.value
+      searchQuery: e.target.value,
+      loading: true
     });
     console.log(e.target.value)
     search(e.target.value)
       .then((res) => {
         console.log(res)
-        this.setState({ queryResult: res })
+        this.setState({ queryResult: res, loading: false })
       })
       .catch(err => console.log(err))
   }
 
   render() {
-    const { queryResult } = this.state;
+    const { queryResult, loading } = this.state;
     const { booksOnTheShelf, handleChange } = this.props;
 
     return (
@@ -43,6 +46,13 @@ export default class Search extends Component {
             </div>
           </div>
           <div className="search-books-results">
+            <PulseLoader
+              className="loader"
+              sizeUnit={"px"}
+              size={14}
+              color={'#123abc'}
+              loading={loading}
+            />
             <BookList
               books={queryResult}
               booksOnTheShelf={booksOnTheShelf}
@@ -50,7 +60,7 @@ export default class Search extends Component {
             />
           </div>
         </div>
-      </div>
+      </div >
     );
   }
 }

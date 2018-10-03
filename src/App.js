@@ -9,7 +9,8 @@ class BooksApp extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      books: []
+      books: [],
+      loading: true
     }
     this.sections = [{ name: 'currentlyReading', title: 'Currently Reading' }, { name: 'wantToRead', title: 'Want To Read' }, { name: 'read', title: 'Read' }];
   }
@@ -18,7 +19,8 @@ class BooksApp extends Component {
     BooksAPI.getAll()
       .then((books) => {
         this.setState(() => ({
-          books
+          books,
+          loading: false
         }))
       })
   }
@@ -50,6 +52,7 @@ class BooksApp extends Component {
             books={this.state.books}
             handleChange={this.handleChange}
             sections={this.sections}
+            loading={this.state.loading}
           />
         )} />
         <Route path='/search' render={() => (
